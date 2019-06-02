@@ -22,7 +22,8 @@ RUN docker-php-ext-install \
     opcache \
     pcntl \
     bcmath \
-    zip
+    zip \
+    soap
 
 RUN apk add --no-cache $PHPIZE_DEPS \
     && pecl install xdebug-2.7.0 \
