@@ -15,7 +15,6 @@ RUN apk add --no-cache \
 RUN docker-php-ext-install \
     pdo_mysql \
     mysqli \
-    gd \
     mbstring \
     intl \
     xml \
@@ -24,6 +23,14 @@ RUN docker-php-ext-install \
     bcmath \
     zip \
     soap
+
+RUN apk add --no-cache libwebp-dev libjpeg-turbo-dev libpng-dev libxpm-dev freetype-dev
+
+RUN docker-php-ext-configure gd --with-gd --with-webp-dir --with-jpeg-dir \
+    --with-png-dir --with-zlib-dir --with-xpm-dir --with-freetype-dir \
+    --enable-gd-native-ttf
+
+RUN docker-php-ext-install gd
 
 RUN apk add --no-cache $PHPIZE_DEPS \
     && pecl install xdebug-2.7.0 \
@@ -42,3 +49,4 @@ RUN apk add --update npm
 RUN apk add yarn
 
 ADD ./docker-php-ext-xdebug.ini /usr/local/etc/php/conf.d
+ADD ./php.ini-development /usr/local/etc/php
