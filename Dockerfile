@@ -27,14 +27,17 @@ RUN docker-php-ext-install \
 RUN apk add --no-cache libwebp-dev libjpeg-turbo-dev libpng-dev libxpm-dev freetype-dev
 
 RUN docker-php-ext-configure gd --with-gd --with-webp-dir --with-jpeg-dir \
-    --with-png-dir --with-zlib-dir --with-xpm-dir --with-freetype-dir \
-    --enable-gd-native-ttf
+    --with-png-dir --with-zlib-dir --with-xpm-dir --with-freetype-dir 
 
 RUN docker-php-ext-install gd
 
 RUN apk add --no-cache $PHPIZE_DEPS \
     && pecl install xdebug-2.7.0 \
     && docker-php-ext-enable xdebug
+
+RUN pecl install -o -f redis \
+    &&  rm -rf /tmp/pear \
+    &&  docker-php-ext-enable redis
 
 RUN curl -sS https://getcomposer.org/installer | php ; mv composer.phar /usr/local/bin/composer;
 RUN composer global require laravel/installer
@@ -49,4 +52,3 @@ RUN apk add --update npm
 RUN apk add yarn
 
 ADD ./docker-php-ext-xdebug.ini /usr/local/etc/php/conf.d
-ADD ./php.ini-development /usr/local/etc/php
