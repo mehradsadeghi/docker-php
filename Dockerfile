@@ -45,7 +45,7 @@ RUN composer global require laravel/installer
 ENV PATH="/root/.composer/vendor/bin:${PATH}"
 
 RUN composer global require hirak/prestissimo
-RUN composer global require phpunit/phpunit
+RUN composer global require phpunit/phpunit ^7
 
 RUN apk add --update nodejs 
 RUN apk add --update npm 
